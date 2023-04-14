@@ -20,20 +20,35 @@
     font-size: 1.55rem;
     color: #fff;
   }
-  
-  .Playlist-save {
+
+  .Playlist-button {
     cursor: pointer;
     width: 10rem;
     padding: .77rem 0;
     border-radius: 54px;
     border-width: 0px;
     margin-top: 1.27rem;
-    background-color: #6c41ec;
     text-align: center;
     font-size: .83rem;
     transition: background-color .25s;
     color: #fff;
     font-weight: 500;
+  }
+  
+  .Playlist-save {
+    background-color: #6c41ec;
+  }
+
+  .Playlist-edit {
+    background-color: #41ec4f;
+  }
+
+  .Playlist-delete {
+    background-color: #921717;
+  }
+
+  .Playlist-clear {
+    background-color: aqua;
   }
   
   .Playlist-save:hover {

@@ -18,12 +18,10 @@ export class Track extends React.Component {
     }
 
     addTrack(){
-        console.log(this.props);
         this.props.onAdd(this.props.track);
     }
 
     removeTrack(){
-        console.log(this.props);
         this.props.onRemove(this.props.track);
     }
 
