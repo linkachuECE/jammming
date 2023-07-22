@@ -1,120 +1,135 @@
 import * as AuthActions from './AuthActions'
+import { webVars } from './Globals';
 
 export async function getArtist(artistID){
-        const accessToken = localStorage.getItem('accessToken')
-        const baseUrl = AuthActions.baseApiUrl + "/v1/artists";
+    const accessToken = localStorage.getItem('accessToken')
+    const baseUrl = webVars.baseApiUrl + "/v1/artists";
 
-        let response = await fetch(`${baseUrl}/${artistID}`, {
-                headers: {
-                        Authorization: `Bearer    ${accessToken}`
-                }
-        });
-        response = await response.json();
+    const response = await fetch(`${baseUrl}/${artistID}`, {
+        headers: {
+            Authorization: `Bearer    ${accessToken}`
+        }
+    });  
+    
+    const data = await response.json();
+
+    return data;
 }
 
 export async function getSearchResults(searchQuery){
-        const baseUrl = AuthActions.baseApiUrl + "/v1/search";
+    const baseUrl = webVars.baseApiUrl + "/v1/search";
 
-        let queryString = new URLSearchParams({
-                q: searchQuery,
-                type: [
-                        "track"
-                ]
-        })
+    const queryString = new URLSearchParams({
+        q: searchQuery,
+        type: [
+            "track"
+        ]
+    })
 
-        const accessToken = await AuthActions.getAccessToken();
+    const accessToken = await AuthActions.getAccessToken();
 
-        let i = 0
-        let response = await fetch(`${baseUrl}?${queryString.toString()}`, {
-                headers: {
-                        Authorization: `Bearer    ${accessToken}`
-                }
+    while(true){
+        const response = await fetch(`${baseUrl}?${queryString.toString()}`, {
+            headers: {
+                Authorization: `Bearer    ${accessToken}`
+            }
         });
 
         if(!response.ok){
-                switch(response.status){
-                        case 401:
-                                await AuthActions.getNewAccessToken();
-                }
+            switch(response.status){
+                case 401:
+                    await AuthActions.getNewAccessToken();
+                    continue;
+                default:
+                    console.log(response);
+                    return null;
+            }
+        } else {   
+            const data = await response.json();
+            return data.tracks.items;
         }
-        
-        let data = await response.json();
-        return data.tracks.items;
+    }
 }
 
 export async function getUserInfo(){
-        const baseUrl = AuthActions.baseApiUrl + "/v1/me";
+    const baseUrl = webVars.baseApiUrl + "/v1/me";
 
-        const accessToken = await AuthActions.getAccessToken();
-        
-        let response = await fetch(baseUrl, {
-                headers: {
-                    Authorization: `Bearer    ${accessToken}`
-                }
+    const accessToken = await AuthActions.getAccessToken();
+    
+    while(true){
+        const response = await fetch(baseUrl, {
+            headers: {
+                Authorization: `Bearer    ${accessToken}`
+            }
         });
-
-        while(true){
-                if(!response.ok && response.status == 401){
-                        await AuthActions.getNewAccessToken();
-                }
-                
-                let data = await response.json();
-                
-                localStorage.setItem("userId", data.id)
-                
-                return data;
+    
+        if(!response.ok){
+            switch(response.status){
+                case 401:
+                    await AuthActions.getNewAccessToken();
+                    continue;
+                default:
+                    console.log(response);
+                    return null;
+            }
+        } else {    
+            const data = await response.json();
+            localStorage.setItem("userId", data.id);
+            return data;
         }
+    }
 }
 
 export async function createPlaylist(title){
-        if(!localStorage.getItem("userId"))
-                await getUserInfo();
+    await getUserInfo();
 
-        const userId = localStorage.getItem("userId");
-        const baseUrl = `${AuthActions.baseApiUrl}/v1/users/${userId}/playlists`;
+    console.log(title);
 
-        const accessToken = await AuthActions.getAccessToken();
+    const userId = localStorage.getItem("userId");
+    const baseUrl = `${webVars.baseApiUrl}/v1/users/${userId}/playlists`;
 
-        let body = {
-                name: title
-        };
+    const accessToken = await AuthActions.getAccessToken();
 
-        let response = await fetch(baseUrl, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer    ${accessToken}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
-        });
+    const body = {
+        name: title
+    };
 
-        let data = await response.json();
+    const response = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer    ${accessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
 
-        return data;
+    const data = await response.json();
+
+    return data;
 }
 
 export async function addToPlaylist(playlistId, tracks){
-        if(!tracks)
-                return;
+    if(!tracks)
+        return;
 
-        const baseUrl = `${AuthActions.baseApiUrl}/v1/playlists/${playlistId}/tracks`;
+    const baseUrl = `${webVars.baseApiUrl}/v1/playlists/${playlistId}/tracks`;
 
-        const accessToken = await AuthActions.getAccessToken();
+    const accessToken = await AuthActions.getAccessToken();
 
-        let body = {
-                uris: tracks.map((track) => track.uri)
-        };
+    const body = {
+        uris: tracks.map((track) => track.uri)
+    };
 
-        let response = await fetch(baseUrl, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer    ${accessToken}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
-        });
+    const response = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer    ${accessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
 
-        let data = await response.json();
+    const data = await response.json();
 
-        return data;
+    return data;
 }

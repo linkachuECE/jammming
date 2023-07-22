@@ -1,0 +1,17 @@
+.app {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.playlistContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searchContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

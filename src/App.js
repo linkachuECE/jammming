@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 import logo from './logo.svg';
-import './App.css';
-import './components/Track/Track'
-import Track from './components/Track/Track';
-import Tracklist from './components/Tracklist/Tracklist';
 import Playlist from './components/Playlist/Playlist';
 import SearchBar from './components/SearchBar/SearchBar';
 import SearchResults from './components/SearchResults/SearchResults';
 import UserProfile from './components/UserProfile/UserProfile';
 import * as Spotify from './Spotify';
 import * as AuthActions from './AuthActions'
+import AppStyles from './App.module.css'
 
 function App() {
     const [searchResults, setSearchResults] = useState([]);
@@ -18,8 +15,11 @@ function App() {
 
     const [userInfo, setUserInfo] = useState({});
 
+    const [loggedIn, setLoggedIn] = useState(false);
+
     useEffect(() => {
         AuthActions.checkState();
+        setLoggedIn(AuthActions.isLoggedIn());
     }, []);
 
     function addToPlaylistHandler(track){
@@ -59,6 +59,8 @@ function App() {
     }
 
     function changePlaylistTitleNameHandler(newTitle){
+        console.log(newTitle);
+
         setPlaylist((prev) => {
             return {
                 title: newTitle,
@@ -103,11 +105,14 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <div className={AppStyles.app}>
             { userInfo && <UserProfile user={userInfo} /> }
-            <Playlist title={playlist.title} tracks={playlist.tracks} onRemoveTrack={removeFromPlaylistHandler} onTitleChange={changePlaylistTitleNameHandler} onCreate={createPlaylistHandler} />
-            <SearchBar onSearchQuery={searchQueryHandler} />
-            <SearchResults searchResults={searchResults} onAddTrack={addToPlaylistHandler} />
+            <div className={AppStyles.searchContainer}>
+                <SearchResults searchResults={searchResults} onAddTrack={addToPlaylistHandler} onSearchQuery={searchQueryHandler} />
+            </div>
+            <div className={AppStyles.playlistContainer}>
+                <Playlist title={playlist.title} tracks={playlist.tracks} onRemoveTrack={removeFromPlaylistHandler} onTitleChange={changePlaylistTitleNameHandler} onCreate={createPlaylistHandler} />
+            </div>
         </div>
     );
 }

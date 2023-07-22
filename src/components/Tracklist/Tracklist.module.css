@@ -1,6 +1,8 @@
 .tracklist {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 5px red solid;
+    width: 50em
 }

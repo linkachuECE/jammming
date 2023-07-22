@@ -1,7 +1,7 @@
-.searchResults {
+.playlist {
+    border: 5px red solid;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    border: 5px red solid;
+    justify-content: center;
 }

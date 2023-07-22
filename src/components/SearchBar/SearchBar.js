@@ -1,6 +1,6 @@
 import React from "react";
-import buttonStyles from "../genericStyleModules/button.module.css"
-import inputStyles from "../genericStyleModules/input.module.css"
+import standardStyles from "../genericStyleModules/standardElements.module.css"
+import searchBarStyles from "./searchBar.module.css"
 
 function SearchBar(props){
     function onSearchQuery(e){
@@ -10,10 +10,10 @@ function SearchBar(props){
     }
 
     return (
-        <div className="searchBar">
+        <div className={searchBarStyles.searchBar}>
             <form onSubmit={onSearchQuery}>
-                <input type="text" id="query" placeholder="Enter a search query" className={inputStyles.input} />
-                <button type="submit" className={buttonStyles.button} >Submit</button>
+                <input type="text" id="query" placeholder="Enter a search query" className={standardStyles.input} />
+                <button type="submit" className={standardStyles.button} >Search</button>
             </form>
         </div>
     );

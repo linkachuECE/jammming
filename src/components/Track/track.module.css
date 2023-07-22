@@ -1,43 +1,43 @@
 .track {
-        border: 2px black solid;
-        border-radius: 5em;
-        width: 30%;
-        margin-top: .5em;
-        margin-bottom: .5em;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        align-items: center;
-        color: white;
-        background-color: rgb(14, 13, 13);
+    border: 2px black solid;
+    border-radius: 5em;
+    width: 100%;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    background-color: rgb(14, 13, 13);
 }
 
 .trackInfo {
-        text-align: left;
-        margin-left: 2.5em;
-        margin-right: 2em;
-        display: flex;
-        flex-direction: column;
+    text-align: left;
+    margin-left: 2.5em;
+    margin-right: 2em;
+    display: flex;
+    flex-direction: column;
 }
 
 h3 {
-        font-size: 1.5em;
-        margin-bottom: 0.2em;
-        text-overflow: ellipsis ellipsis;
-        max-width: 17em;
-        overflow: hidden;
-        white-space: nowrap;
+    font-size: 1.5em;
+    margin-bottom: 0.2em;
+    text-overflow: ellipsis ellipsis;
+    max-width: 17em;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 h4 {
-        font-size: 1.0em;
-        margin-top: 0.5em;
+    font-size: 1.0em;
+    margin-top: 0.5em;
 }
 
 .button {
-        margin-right: 1em;
-        min-width: 3em;
-        font-size: 1.5em;
-        border-radius: 5em;
+    margin-right: 1em;
+    min-width: 3em;
+    font-size: 1.5em;
+    border-radius: 5em;
 }

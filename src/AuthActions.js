@@ -1,8 +1,4 @@
-export const baseApiUrl = "https://api.spotify.com";
-export const tokenUrl = "https://accounts.spotify.com/api/token";
-export const clientId = "a23843d079a34f28a8368672dc8a7bcd";
-export const clientSecret = "d98f121afd3b4d9babc64ce90f4d35f2";
-export const redirectUri = 'http://localhost:3000';
+import { webVars } from "./Globals";
 
 
 function generateRandomString(length) {
@@ -41,9 +37,9 @@ export async function authorize(){
         
         let args = new URLSearchParams({
             response_type: 'code',
-            client_id: clientId,
+            client_id: webVars.clientId,
             scope: scope,
-            redirect_uri: redirectUri,
+            redirect_uri: webVars.redirectUri,
             state: state,
             code_challenge_method: 'S256',
             code_challenge: codeChallenge
@@ -76,7 +72,7 @@ export function checkAccessToken(){
 }
 
 export async function testAccessToken(){
-    const baseUrl = baseApiUrl + "/v1/me";
+    const baseUrl = webVars.baseApiUrl + "/v1/me";
 
     let tokenDetails = localStorage.getItem('tokenDetails');
     
@@ -86,7 +82,7 @@ export async function testAccessToken(){
     tokenDetails = JSON.parse(tokenDetails);
     let accessToken = tokenDetails.access_token;
     
-    let response = await fetch(baseUrl, {
+    const response = await fetch(baseUrl, {
         headers: {
             Authorization: `Bearer    ${accessToken}`
         }
@@ -106,8 +102,8 @@ export async function getNewAccessToken(){
     let body = new URLSearchParams({
         grant_type: 'authorization_code',
         code: authCode,
-        redirect_uri: redirectUri,
-        client_id: clientId,
+        redirect_uri: webVars.redirectUri,
+        client_id: webVars.clientId,
         code_verifier: codeVerifier
     });
     
@@ -120,12 +116,14 @@ export async function getNewAccessToken(){
         body: body
     })
 
-    console.log(response);
-    
     if (!response.ok){
         switch(response.status){
             case 400:
                 authorize();
+                break;
+            default:
+                console.log(response);
+                return null;
         }
     }    
         
@@ -146,6 +144,8 @@ export async function getAccessToken(){
     
     if(!tokenDetails){
         tokenDetails = await getNewAccessToken();
+        if(!tokenDetails)
+            return null;
     }
     
     tokenDetails = JSON.parse(tokenDetails);
@@ -188,7 +188,7 @@ export function checkState(){
             testAccessToken()
             .then((tokenValid) => {
                 if(!tokenValid){
-                    console.log("Access token not found, requesting a new one");
+                    console.log("Invalid access token, requesting a new one");
 
                     getNewAccessToken();
 
