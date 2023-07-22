@@ -1,5 +1,7 @@
 import React from "react";
 import Tracklist from "../Tracklist/Tracklist";
+import buttonStyles from "../genericStyleModules/button.module.css"
+import inputStyles from "../genericStyleModules/input.module.css"
 
 function Playlist(props){
     const title = props.title;
@@ -18,8 +20,8 @@ function Playlist(props){
     return (
         <div className="playlist">
             <form>
-                <input type="text" placeholder="Enter a playlist title" value={title} onChange={onTitleChange} />
-                <button type="submit" onClick={onCreate}>Save to Account</button>
+                <input type="text" placeholder="Enter a playlist title" value={title} onChange={onTitleChange} className={inputStyles.input} />
+                <button type="submit" onClick={onCreate} className={buttonStyles.button}>Save to Account</button>
             </form>
             <Tracklist tracks={props.tracks} onAddTrack={props.onAddTrack} onRemoveTrack={props.onRemoveTrack} added={true} />
         </div>

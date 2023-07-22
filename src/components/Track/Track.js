@@ -1,28 +1,30 @@
 import React from "react";
+import buttonStyles from "../genericStyleModules/button.module.css"
+import trackStyles from "./track.module.css"
 
 function Track(props){
-    const track = props.track;
+        const track = props.track;
 
-    function onAddTrack(e){
-        props.onAddTrack(track);
-    }
+        function onAddTrack(e){
+                props.onAddTrack(track);
+        }
 
-    function onRemoveTrack(e){
-        props.onRemoveTrack(track);
-    }
+        function onRemoveTrack(e){
+                props.onRemoveTrack(track);
+        }
 
-    const handler = props.added ? onRemoveTrack : onAddTrack;
-    const symbol = props.added ? "-" : "+";
+        const handler = props.added ? onRemoveTrack : onAddTrack;
+        const symbol = props.added ? "-" : "+";
 
-    return (
-        <div className="track">
-            <div className="trackInfo">
-                <h3>{track.title}</h3>
-                <h4>{track.artist} | {track.album}</h4>
-            </div>
-            <button className="AddOrRemove" onClick={handler}>{symbol}</button>
-        </div>
-    );
+        return (
+                <div className={trackStyles.track}>
+                        <div className={trackStyles.trackInfo}>
+                                <h3 numberOfLines={1} >{track.title}</h3>
+                                <h4>{track.artist} | {track.album}</h4>
+                        </div>
+                        <button className={`${buttonStyles.button} ${trackStyles.button}`} onClick={handler}>{symbol}</button>
+                </div>
+        );
 }
 
 export default Track;
