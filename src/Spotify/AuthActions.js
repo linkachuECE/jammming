@@ -31,8 +31,13 @@ export async function authorize(){
     
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
         let state = generateRandomString(16);
-        let scope = 'user-read-private user-read-email playlist-modify-private playlist-modify-public';
+        let scope =     'user-read-private user-read-email playlist-modify-private playlist-modify-public user-top-read user-follow-read \
+ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control \
+streaming playlist-read-private playlist-read-collaborative user-follow-modify user-read-playback-position user-read-recently-played \
+user-library-modify user-library-read';
         
+//user-soa-link user-soa-unlink user-manage-entitlements user-manage-partner user-create-partner
+
         localStorage.setItem('code_verifier', codeVerifier);
         
         let args = new URLSearchParams({
@@ -72,7 +77,7 @@ export function checkAccessToken(){
 }
 
 export async function testAccessToken(){
-    const baseUrl = webVars.baseApiUrl + "/v1/me";
+    const baseUrl = webVars.baseApiUrl + "/me";
 
     let tokenDetails = localStorage.getItem('tokenDetails');
     

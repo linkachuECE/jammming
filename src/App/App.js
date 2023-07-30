@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import Playlist from './Components/Playlist/Playlist';
-import SearchBar from './Components/SearchBar/SearchBar';
-import SearchResults from './Components/SearchResults/SearchResults';
-import UserProfile from './Components/UserProfile/UserProfile';
-import * as Spotify from './Spotify/Spotify';
-import * as AuthActions from './Spotify/AuthActions'
+import logo from '../logo.svg';
+import Playlist from '../Components/Playlist/Playlist';
+import SearchBar from '../Components/SearchBar/SearchBar';
+import SearchResults from '../Components/SearchResults/SearchResults';
+import UserProfile from '../Components/UserProfile/UserProfile';
+import * as Spotify from '../Spotify/Spotify';
+import * as AuthActions from '../Spotify/AuthActions'
 import AppStyles from './App.module.css'
 
 function App() {
@@ -109,8 +109,19 @@ function App() {
     }
 
     async function functionTester(){
-        const result = await Spotify.Player_startOrResumePlayback({device_id: "Something"});
-        console.log(result);
+        const result1 = await Spotify.Player_getPlaybackState();
+        console.log(result1);
+
+        const result2 = await Spotify.Player_getUserQueue();
+        console.log(result2);
+
+        const result3 = await Spotify.Player_getRecentlyPlayedTracks();
+        console.log(result3);
+        const randomTrackUri = result3.items[0].track.uri;
+        console.log(randomTrackUri);
+
+        const result4 = await Spotify.Player_addItemToPlayback(randomTrackUri);
+        console.log(result4);
     }
 
     return (
