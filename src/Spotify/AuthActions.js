@@ -40,11 +40,15 @@ user-library-modify user-library-read';
 
         localStorage.setItem('code_verifier', codeVerifier);
         
+        let redirectUri = window.location.protocol + "//" + window.location.host;
+
+        console.log(redirectUri);
+
         let args = new URLSearchParams({
             response_type: 'code',
             client_id: webVars.clientId,
             scope: scope,
-            redirect_uri: webVars.redirectUri,
+            redirect_uri: redirectUri,
             state: state,
             code_challenge_method: 'S256',
             code_challenge: codeChallenge
