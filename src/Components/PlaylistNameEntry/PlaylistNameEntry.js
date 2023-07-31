@@ -17,7 +17,7 @@ function PlaylistNameEntry(props){
     return (
         <div>
             <form>
-                <input type="text" placeholder="Enter a playlist title" value={title} onChange={onTitleChange} className={standardStyles.input} />
+                <input type="text" autoComplete="off" placeholder="Enter a playlist title" value={title} onChange={onTitleChange} className={standardStyles.input} />
                 <button type="submit" onClick={onCreate} className={standardStyles.button}>Save to Account</button>
             </form>
         </div>

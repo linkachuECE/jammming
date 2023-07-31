@@ -12,7 +12,7 @@ function SearchBar(props){
     return (
         <div className={searchBarStyles.searchBar}>
             <form onSubmit={onSearchQuery}>
-                <input type="text" id="query" placeholder="Enter a search query" className={standardStyles.input} />
+                <input type="text" id="query" autoComplete="off" placeholder="Enter a search query" className={standardStyles.input} />
                 <button type="submit" className={standardStyles.button} >Search</button>
             </form>
         </div>

@@ -75,10 +75,20 @@ export async function getAuthCode(){
 }
 
 export function checkAccessToken(){
-    if(localStorage.getItem("tokenDetails"))
-        return true;
-    else
-        return false;
+    const tokenDetails = localStorage.getItem("tokenDetails")
+    let tokenDetailsObject;
+    if(tokenDetails){
+        try{
+            tokenDetailsObject = JSON.parse(tokenDetails);
+        } catch(err){
+            console.log(err);
+        }
+        
+        if(tokenDetailsObject && tokenDetailsObject.access_token)
+            return true;
+        else
+            return false;
+    }
 }
 
 export async function testAccessToken(){
@@ -110,7 +120,6 @@ export async function getNewAccessToken(){
     codeVerifier = localStorage.getItem('code_verifier');
     
     let redirectUri = getRedirectUri();
-    console.log(redirectUri);
 
     let body = new URLSearchParams({
         grant_type: 'authorization_code',
@@ -160,8 +169,12 @@ export async function getAccessToken(){
         if(!tokenDetails)
             return null;
     }
-    
-    tokenDetails = JSON.parse(tokenDetails);
+    try{
+        tokenDetails = JSON.parse(tokenDetails);
+    } catch(err){
+        console.log(err);
+    }
+
     return tokenDetails.access_token;
 }
 
@@ -179,7 +192,7 @@ export function isLoggedIn(){
     return testAccessToken();
 }
 
-export function checkState(){
+export async function checkState(){
     // If there is an auth code in the URL, we need to check the access token and request a new one if it isn't valid
     if(checkAuthCode()){
         console.log("Auth code checked and found");
@@ -187,7 +200,7 @@ export function checkState(){
         if(!checkAccessToken()){
             console.log("Access token not found, requesting a new one");
 
-            getNewAccessToken();
+            await getNewAccessToken();
 
             console.log("Requested a new access token");
             
@@ -198,24 +211,22 @@ export function checkState(){
             }
 
         } else {
-            testAccessToken()
-            .then((tokenValid) => {
-                if(!tokenValid){
-                    console.log("Invalid access token, requesting a new one");
+            const tokenValid = await testAccessToken();
+            if(!tokenValid){
+                console.log("Invalid access token, requesting a new one");
 
-                    getNewAccessToken();
+                await getNewAccessToken();
 
-                    console.log("Requested a new access token");
+                console.log("Requested a new access token");
 
-                    if(checkAccessToken()){
-                        console.log("New access token saved");
-                    } else {
-                        console.log("New access token not saved");
-                    }
+                if(checkAccessToken()){
+                    console.log("New access token saved");
                 } else {
-                    console.log("Access token in storage is valid");
+                    console.log("New access token not saved");
                 }
-            })
+            } else {
+                console.log("Access token in storage is valid");
+            }
         }
     // If there is no auth code, check if an access token exists.
     // If it does and it's valid, do nothing
@@ -224,16 +235,15 @@ export function checkState(){
         console.log("Auth code checked and not found");
         if(checkAccessToken()){
             console.log("Found access token, testing...")
-            testAccessToken()
-            .then((tokenValid) => {
-                if(!tokenValid){
-                    console.log("Access token in local storage not valid, deleting...")
-                    deleteToken();
-                    console.log("Delete access token");
-                } else {
-                    console.log("Access token in storage is valid");
-                }
-            })
+            const tokenValid = await testAccessToken();
+
+            if(!tokenValid){
+                console.log("Access token in local storage not valid, deleting...")
+                deleteToken();
+                console.log("Delete access token");
+            } else {
+                console.log("Access token in storage is valid");
+            }
         } else {
             console.log("Access token checked and not found");
         }
