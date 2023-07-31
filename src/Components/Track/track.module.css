@@ -1,7 +1,7 @@
 .track {
     border: 2px black solid;
     border-radius: 5em;
-    width: 100%;
+    width: 90%;
     margin-top: .5em;
     margin-bottom: .5em;
     display: flex;

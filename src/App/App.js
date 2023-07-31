@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import logo from '../logo.svg';
 import Playlist from '../Components/Playlist/Playlist';
-import SearchBar from '../Components/SearchBar/SearchBar';
+import NavBar from '../Components/NavBar/NavBar';
 import SearchResults from '../Components/SearchResults/SearchResults';
 import UserProfile from '../Components/UserProfile/UserProfile';
 import * as Spotify from '../Spotify/Spotify';
@@ -110,30 +110,17 @@ function App() {
 
     async function functionTester(){
         const result1 = await Spotify.Player_getPlaybackState();
-        console.log(result1);
-
-        const result2 = await Spotify.Player_getUserQueue();
-        console.log(result2);
-
-        const result3 = await Spotify.Player_getRecentlyPlayedTracks();
-        console.log(result3);
-        const randomTrackUri = result3.items[0].track.uri;
-        console.log(randomTrackUri);
-
-        const result4 = await Spotify.Player_addItemToPlayback(randomTrackUri);
-        console.log(result4);
     }
 
     return (
         <div className={AppStyles.app}>
-            { userInfo && <UserProfile user={userInfo} /> }
-            <div className={AppStyles.searchContainer}>
-                <SearchResults searchResults={searchResults} onAddTrack={addToPlaylistHandler} onSearchQuery={searchQueryHandler} />
+            <NavBar />
+            <div className={AppStyles.body}>
+                <div className={AppStyles.searchAndPlaylistContainer}>
+                    <SearchResults searchResults={searchResults} onAddTrack={addToPlaylistHandler} onSearchQuery={searchQueryHandler} />
+                    <Playlist title={playlist.title} tracks={playlist.tracks} onRemoveTrack={removeFromPlaylistHandler} onTitleChange={changePlaylistTitleNameHandler} onCreate={createPlaylistHandler} />
+                </div>
             </div>
-            <div className={AppStyles.playlistContainer}>
-                <Playlist title={playlist.title} tracks={playlist.tracks} onRemoveTrack={removeFromPlaylistHandler} onTitleChange={changePlaylistTitleNameHandler} onCreate={createPlaylistHandler} />
-            </div>
-            <button onClick={functionTester}>Test function</button>
         </div>
     );
 }
