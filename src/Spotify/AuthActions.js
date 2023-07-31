@@ -1,5 +1,8 @@
 import { webVars } from "./Globals";
 
+function getRedirectUri(){
+    return window.location.protocol + "//" + window.location.host;
+}
 
 function generateRandomString(length) {
     let text = '';
@@ -39,10 +42,8 @@ user-library-modify user-library-read';
 //user-soa-link user-soa-unlink user-manage-entitlements user-manage-partner user-create-partner
 
         localStorage.setItem('code_verifier', codeVerifier);
-        
-        let redirectUri = window.location.protocol + "//" + window.location.host;
 
-        console.log(redirectUri);
+        const redirectUri = getRedirectUri();
 
         let args = new URLSearchParams({
             response_type: 'code',
@@ -108,10 +109,13 @@ export async function getNewAccessToken(){
     let i = 0
     codeVerifier = localStorage.getItem('code_verifier');
     
+    let redirectUri = getRedirectUri();
+    console.log(redirectUri);
+
     let body = new URLSearchParams({
         grant_type: 'authorization_code',
         code: authCode,
-        redirect_uri: webVars.redirectUri,
+        redirect_uri: redirectUri,
         client_id: webVars.clientId,
         code_verifier: codeVerifier
     });
